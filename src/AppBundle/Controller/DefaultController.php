@@ -2,24 +2,18 @@
 
 namespace AppBundle\Controller;
 
-use Psr\Http\Message\ServerRequestInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Zend\Diactoros\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
     /**
      * @Route("/app/example", name="homepage")
      */
-    public function indexAction(ServerRequestInterface $psrRequest)
+    public function indexAction(Request $request)
     {
-        $queryParams = $psrRequest->getQueryParams();
-        $name = isset($queryParams['name']) ? $queryParams['name'] : 'anonymous';
-
-        $psrResponse = new Response();
-        $psrResponse->getBody()->write(sprintf('Hello %s!', htmlspecialchars($name)));
-
-        return $psrResponse;
+        return new Response(htmlspecialchars($request->query->get('name')));
     }
 }
